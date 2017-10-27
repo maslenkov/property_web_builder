@@ -12,7 +12,7 @@ Vue.component('squares-container', {
   },
   // props: ['selectOptions', 'selectPickerTexts', 'selected'],
   watch: {
-    props(val) {
+    props: function (val) {
       val.forEach(function(prop){
         prop.url = "/tabs/" + prop[".key"];
       });
@@ -26,14 +26,14 @@ Vue.component('squares-container', {
         source: INMOAPP.fbDb.ref('props/pwb1'),
         // asObject: true,
         // Optional, allows you to handle any errors.
-        cancelCallback(err) {
+        cancelCallback: function (err) {
           debugger;
           console.error(err);
         }
       }
     }
   },
-  data: () => {
+  data: function () {
     return {
       props: []
     }

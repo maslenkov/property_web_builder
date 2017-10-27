@@ -50,12 +50,12 @@ module Pwb
       end
 
       protected
-      
+
       def seed_contacts yml_file
         contacts_yml = load_seed_yml yml_file
         contacts_yml.each do |contact_yml|
           unless Pwb::Contact.where(primary_email: contact_yml['email']).count > 0
-            Pwb::Contact.create!(contact_yml)
+            Pwb::Contact.create!(contact_yml.merge({ user: User.all.sample }))
           end
         end
       end
@@ -82,7 +82,7 @@ module Pwb
         links_yml = load_seed_yml yml_file
         links_yml.each do |single_link_yml|
           unless Pwb::Link.where(slug: single_link_yml['slug']).count > 0
-            Pwb::Link.create!(single_link_yml)
+            Pwb::Link.create!(single_link_yml.merge(page: Pwb::Page.find_by!(slug: single_link_yml['page_slug'])))
           end
         end
       end

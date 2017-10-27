@@ -9,16 +9,14 @@ INMOAPP.PageContent = Vue.component('page-content', {
     // .on('change', function() {
     //   vm.$emit('input', this.value)
     // });
+    document.title = this.pageTitle + ' - Vue Material';
   },
   props: {
     pageTitle: String
   },
   methods: {
-    toggleSidenav() {
+    toggleSidenav: function () {
       this.$root.toggleSidenav();
     }
-  },
-  mounted() {
-    document.title = this.pageTitle + ' - Vue Material';
   }
 });

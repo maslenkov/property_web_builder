@@ -86,7 +86,6 @@ module Pwb
     # expects a hash with keys like "cl.casafactory.fieldLabels.extras.alarma"
     # each with a value of true or false
     def set_extras=(extras_json)
-      return unless extras_json.class == Hash
       extras_json.keys.each do |feature_key|
         # TODO - create feature_key if its missing
         if extras_json[feature_key] == "true" || extras_json[feature_key] == true

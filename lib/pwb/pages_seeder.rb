@@ -46,21 +46,20 @@ module Pwb
 
       protected
 
+      def seed_page_part yml_file
+        page_parts_seed_file = Pwb::Engine.root.join('db', 'yml_seeds', 'page_parts', yml_file)
+        page_parts_yml = YAML.load_file(page_parts_seed_file)
+        unless Pwb::PagePart.where({page_part_key: page_parts_yml[0]['page_part_key'], page_slug: page_parts_yml[0]['page_slug']}).count > 0
+          page_part = Pwb::PagePart.new(page_parts_yml[0])
+          page_part.save!(validate: false)
+        end
+      end
 
       def seed_page yml_file
         page_seed_file = Pwb::Engine.root.join('db', 'yml_seeds', 'pages', yml_file)
         page_yml = YAML.load_file(page_seed_file)
         unless Pwb::Page.where(slug: page_yml[0]['slug']).count > 0
-          Pwb::Page.create!(page_yml)
-        end
-      end
-
-
-      def seed_page_part yml_file
-        lf_seed_file = Pwb::Engine.root.join('db', 'yml_seeds', 'page_parts', yml_file)
-        lf_yml = YAML.load_file(lf_seed_file)
-        unless Pwb::PagePart.where({page_part_key: lf_yml[0]['page_part_key'],page_slug: lf_yml[0]['page_slug']}).count > 0
-          Pwb::PagePart.create!(lf_yml)
+          Pwb::Page.create!(page_yml[0])
         end
       end
 
@@ -98,23 +97,6 @@ module Pwb
           end
         end
 
-      end
-
-      def set_page_content_order_and_visibility locale, page_part, seed_content
-
-        page_part_editor_setup = page_part.editor_setup
-        page = page_part.page
-        # page_part_key uniquely identifies a fragment
-        page_part_key = page_part.page_part_key
-
-        sort_order = page_part_editor_setup["default_sort_order"] || 1
-        page.set_fragment_sort_order page_part_key, sort_order
-
-        visible_on_page = false
-        if page_part_editor_setup["default_visible_on_page"]
-          visible_on_page = true
-        end
-        page.set_fragment_visibility page_part_key, visible_on_page
       end
 
       def set_page_block_content locale, page_part, seed_content
@@ -159,6 +141,22 @@ module Pwb
         p "#{page.slug} page #{page_part_key} content set for #{locale}."
       end
 
+      def set_page_content_order_and_visibility locale, page_part, seed_content
+
+        page_part_editor_setup = page_part.editor_setup
+        page = page_part.page
+        # page_part_key uniquely identifies a fragment
+        page_part_key = page_part.page_part_key
+
+        sort_order = page_part_editor_setup["default_sort_order"] || 1
+        page.set_fragment_sort_order page_part_key, sort_order
+
+        visible_on_page = false
+        if page_part_editor_setup["default_visible_on_page"]
+          visible_on_page = true
+        end
+        page.set_fragment_visibility page_part_key, visible_on_page
+      end
     end
   end
 end
