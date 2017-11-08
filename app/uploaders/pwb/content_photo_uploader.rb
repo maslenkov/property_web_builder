@@ -18,12 +18,16 @@ class Pwb::ContentPhotoUploader < CarrierWave::Uploader::Base
   # https://github.com/carrierwaveuploader/carrierwave/wiki/How-to:-Dynamically-set-storage-type
   def self.set_storage
     unless Rails.application.secrets.cloudinary_url
-      :file
+      if ENV['AWS_ACCESS_KEY']
+        :fog
+      else
+        :file
+      end
     end
   end
 
   storage set_storage
-  
+
   # Provide a default URL as a default if there hasn't been a file uploaded:
   # def default_url
   #   # For Rails 3.1+ asset pipeline compatibility:

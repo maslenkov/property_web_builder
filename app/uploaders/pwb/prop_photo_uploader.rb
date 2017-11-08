@@ -18,7 +18,11 @@ class Pwb::PropPhotoUploader < CarrierWave::Uploader::Base
   # https://github.com/carrierwaveuploader/carrierwave/wiki/How-to:-Dynamically-set-storage-type
   def self.set_storage
     unless Rails.application.secrets.cloudinary_url
-      :file
+      if ENV['AWS_ACCESS_KEY']
+        :fog
+      else
+        :file
+      end
     end
   end
 
