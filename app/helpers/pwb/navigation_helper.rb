@@ -64,14 +64,14 @@ module Pwb
         # rescue Exception => e
       end
       if target_path
-        style_class = 'selected active' if current_page?( target_path )
+        style_class = 'current' if current_page?( target_path )
         if current_page?("/") && (page[:link_path] == "home_path")
           # so correct tab is higlighted when at root path
-          style_class = 'selected active'
+          style_class = 'current'
         end
         html = <<-HTML
-        <li class="#{style_class}">
-        #{link_to page.link_title, target_path, target: page[:href_target]}
+        <li>
+        #{link_to page.link_title, target_path, target: page[:href_target], class: style_class}
         </li>
         HTML
       end
