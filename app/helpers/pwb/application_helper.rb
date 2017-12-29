@@ -176,5 +176,18 @@ module Pwb
         ""
       end
     end
+
+    def footer_links
+      @footer_links ||= Pwb::Link.ordered_visible_footer.map do |page|
+        if page[:link_path].present?
+          target_path = self.pwb.send(page[:link_path], [page[:link_path_params]], {locale: locale})
+        elsif page[:link_url].present?
+          target_path = page[:link_url]
+        else
+          target_path = '/'
+        end
+        { title: page.link_title, path: target_path }
+      end
+    end
   end
 end
